@@ -15,7 +15,7 @@
 ## 安装
 
 ```
-npm i lib-qqwry
+npm i @yuyuqaq/lib-qqwry
 ```
 
 ## 数据文件
@@ -30,7 +30,7 @@ npm i lib-qqwry
 ### Node (CJS)
 
 ```js
-const libqqwry = require("lib-qqwry");
+const libqqwry = require("@yuyuqaq/lib-qqwry");
 const qqwry = libqqwry("./data/qqwry.dat"); // dataPath 必填
 qqwry.speed(); // 启用急速模式
 
@@ -51,7 +51,7 @@ qqwry
 ### Node (ESM)
 
 ```js
-import libqqwry from "lib-qqwry";
+import libqqwry from "@yuyuqaq/lib-qqwry";
 const qqwry = libqqwry("./data/qqwry.dat", true); // dataPath, speed
 const result = qqwry.searchIP("202.103.102.10");
 ```
@@ -59,11 +59,11 @@ const result = qqwry.searchIP("202.103.102.10");
 ### ipdb 格式
 
 ```js
-import libqqwry from "lib-qqwry";
+import libqqwry from "@yuyuqaq/lib-qqwry";
 
 const ipdb = libqqwry.ipdb("./data/qqwry.ipdb"); // dataPath 必填
 const result = ipdb.searchIP("8.8.8.8");
-// { country_name: '美国', region_name: '加利福尼亚州圣克拉拉县山景市谷歌公司' }
+// { ip: '8.8.8.8', country_name: '美国', region_name: '加利福尼亚州圣克拉拉县山景市谷歌公司' }
 ```
 
 ## API
@@ -97,7 +97,7 @@ IP地址转数值：
 
 ### libqqwry(dataPath, speed?) / libqqwry.init(dataPath, speed?)
 
-实例化一个 qqwry.dat 格式解析器：
+实例化一个 qqwry.dat 格式解析器（`libqqwry.init()` 是其等价别名）：
 
 - `dataPath`: IP库路径，**必填**
 - `speed`: 是否开启急速模式（将数据文件读入内存），可选，默认 `false`
@@ -118,6 +118,50 @@ const qqwry = libqqwry("./data/qqwry.dat", true); // 急速模式
 ```js
 const ipdb = libqqwry.ipdb("./data/qqwry.ipdb", { language: "CN" });
 ```
+
+## Ipdb 解析器
+
+### ipdb.searchIP(ip [, language])
+
+单个IP查询，也可直接调用：`ipdb(ip)` 或 `ipdb(ip, language)`
+
+```
+> ipdb("8.8.8.8")
+{ ip: '8.8.8.8',
+  country_name: '美国',
+  region_name: '加利福尼亚州圣克拉拉县山景市谷歌公司' }
+```
+
+### ipdb.fields()
+
+返回 ipdb 文件中定义的字段列表：
+
+```
+> ipdb.fields()
+[ 'country_name', 'region_name', 'city_name', 'isp_domain' ]
+```
+
+### ipdb.languages()
+
+返回 ipdb 文件中支持的语言列表：
+
+```
+> ipdb.languages()
+[ 'CN', 'EN' ]
+```
+
+### ipdb.buildTime()
+
+返回 ipdb 文件的构建时间（Unix 时间戳，单位：秒）：
+
+```
+> ipdb.buildTime()
+1714003200
+```
+
+### ipdb.speed() / ipdb.unSpeed()
+
+ipdb 格式始终将数据加载到内存中，这两个方法为兼容接口，实际无操作。
 
 ## Qqwry 解析器
 
