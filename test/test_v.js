@@ -124,6 +124,36 @@ if (arg == "-1") {
           getQPS(n, te - tb),
       );
     });
+} else if (arg == "-4") {
+  console.log("--- ipdb格式测试 ---");
+  var libqqwry = require("../");
+  var ipdb = libqqwry.ipdb();
+  console.log("fields:", ipdb.fields());
+  console.log("languages:", ipdb.languages());
+  console.log("buildTime:", new Date(ipdb.buildTime() * 1000).toISOString());
+  var v = ipdb("255.255.255.255");
+  console.log("version info:", JSON.stringify(v));
+  var r = ipdb("8.8.8.8");
+  console.log("8.8.8.8:", JSON.stringify(r));
+  return;
+} else if (arg == "-5") {
+  console.log("--- ipdb格式效率测试 IP查询(searchIP) ---");
+  var libqqwry = require("../");
+  var ipdb = libqqwry.ipdb();
+  var tb, te, nn;
+
+  tb = Date.now();
+  nn = v4(1000, ipdb);
+  te = Date.now();
+  console.log(
+    "单次查询(" +
+      nn / 10000 +
+      "万次):" +
+      (te - tb) +
+      "ms - " +
+      getQPS(nn, te - tb),
+  );
+  return;
 } else if (arg) {
   //验证是否正常
   // qqwry1.speed();
@@ -168,7 +198,7 @@ function v2(n, qqwry) {
   return [k * ipdsl, nb];
 }
 
-function v3(qqwry) {
+async function v3(qqwry) {
   function qqwryIPs(ip, ip1) {
     return new Promise(function (reslove, reject) {
       qqwry(ip, ip1, function (err, data) {
@@ -177,15 +207,22 @@ function v3(qqwry) {
       });
     });
   }
-  return Promise.all([
+  const arr = await Promise.all([
     qqwryIPs("0.0.0.0", "50.255.255.255"),
     qqwryIPs("51.0.0.0", "99.255.255.255"),
-    // qqwryIPs('100.0.0.0', '150.255.255.255')
-    // qqwryIPs('151.0.0.0', '199.255.255.255'),
-    // qqwryIPs('200.0.0.0', '255.255.255.255'),
-  ]).then(function (arr) {
-    return arr.reduce((a, b) => {
-      return a + b.length;
-    }, 0);
-  });
+  ]);
+  return arr.reduce((a, b) => {
+    return a + b.length;
+  }, 0);
+}
+
+//ipdb单IP查询
+function v4(n, ipob) {
+  var nb = 0,
+    ipsl = ips.length;
+  for (var i = 0; i < n; i++) {
+    for (var ii = 0; ii < ipsl; ipob(ips[ii++]));
+    nb += ipsl;
+  }
+  return nb;
 }

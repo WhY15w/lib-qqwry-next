@@ -64,6 +64,47 @@ declare namespace Spec {
       options?: options,
     ): stream.Readable;
   }
+
+  interface IpdbInfo {
+    ip: string;
+    [field: string]: string;
+  }
+
+  interface IpdbOptions {
+    /**
+     * 查询语言 默认 'CN'
+     */
+    language?: string;
+  }
+
+  class IpdbDriver {
+    /**
+     * 单IP查询
+     * @param ip IP地址
+     * @param language 查询语言
+     */
+    searchIP(ip: string | number, language?: string): Spec.IpdbInfo;
+    /**
+     * 获取可用字段名
+     */
+    fields(): string[];
+    /**
+     * 获取可用语言
+     */
+    languages(): string[];
+    /**
+     * 获取数据库构建时间
+     */
+    buildTime(): number;
+    /**
+     * 极速模式 (ipdb始终为内存模式)
+     */
+    speed(): Spec.IpdbDriver;
+    /**
+     * 关闭极速模式 (ipdb始终为内存模式)
+     */
+    unSpeed(): Spec.IpdbDriver;
+  }
 }
 
 declare const Qqwry: {
@@ -131,6 +172,19 @@ declare const Qqwry: {
    * @param int 32位数值
    */
   ipEndianChange(int: number): number;
+  /**
+   * 创建ipdb格式驱动
+   * @param dataPath ipdb文件路径
+   * @param options 选项
+   */
+  ipdb(dataPath?: string, options?: Spec.IpdbOptions): Spec.IpdbDriver;
+  /**
+   * IpdbDriver 构造函数
+   */
+  IpdbDriver: {
+    new (dataPath?: string, options?: Spec.IpdbOptions): Spec.IpdbDriver;
+    (dataPath?: string, options?: Spec.IpdbOptions): Spec.IpdbDriver;
+  };
 };
 
 export = Qqwry;
