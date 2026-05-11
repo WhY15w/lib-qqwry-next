@@ -1,7 +1,7 @@
 {
   "name": "lib-qqwry",
-  "version": "1.3.4",
-  "description": "Using NodeJS analytical IP Library (qqwry.dat) module.",
+  "version": "2.0.0",
+  "description": "Using NodeJS analytical IP Library (qqwry.dat/qqwry.ipdb) module.",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -36,7 +36,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/cnwhy/lib-qqwry.git"
+    "url": "https://github.com/WhY15w/lib-qqwry.git"
   },
   "keywords": [
     "qqwry",
@@ -44,7 +44,7 @@
     "IP地址"
   ],
   "author": {
-    "name": "cnwhy"
+    "name": "HurryWang"
   },
   "license": "BSD",
   "dependencies": {
