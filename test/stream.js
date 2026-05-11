@@ -1,10 +1,10 @@
-var Qqwry = require('../');
+var Qqwry = require("../");
 var qqwry = Qqwry();
 
 // var ss = lib.searchIPScopeStream('223.0.0.0', '255.255.255.255', { type: 'csv', outHeader: true });
 // ss.pipe(process.stdout);
 
-qqwry.searchIPScopeStream("8.8.8.0","8.8.8.0").pipe(process.stdout);
+qqwry.searchIPScopeStream("8.8.8.0", "8.8.8.0").pipe(process.stdout);
 // qqwry.searchIPScopeStream("8.8.8.0","8.8.8.8",{format:'csv'}).pipe(process.stdout);
 // qqwry.searchIPScopeStream("8.8.8.0","8.8.8.8",{format:'json',outHeader:true}).pipe(process.stdout);
 // var ss = qqwry.searchIPScopeStream("8.8.8.0","8.8.8.8",{format:'object'});
@@ -12,7 +12,6 @@ qqwry.searchIPScopeStream("8.8.8.0","8.8.8.0").pipe(process.stdout);
 // ss.on('data',function(data){
 // 	console.log('> ', typeof data);
 // })
-
 
 // while (true) {
 // 	var obj = ss.read();
