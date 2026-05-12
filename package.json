@@ -1,6 +1,6 @@
 {
   "name": "@yuyuqaq/lib-qqwry",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Using NodeJS analytical IP Library (qqwry.dat/qqwry.ipdb) module.",
   "type": "module",
   "main": "./dist/index.cjs",
