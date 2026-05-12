@@ -26,7 +26,6 @@ export interface IpdbOptions {
 }
 
 export interface CmdApi {
-  name: string;
   readBuffer(start: number, length: number): Buffer;
   readUIntLE(start: number, length: number): number;
   getStringByteArray(start: number): number[];
@@ -36,7 +35,6 @@ export interface CmdApi {
 export type CmdFactory = () => CmdApi;
 
 export interface IpdbCmdApi {
-  name: string;
   find(addr: string, language: string): string[];
   fields(): string[];
   languages(): string[];

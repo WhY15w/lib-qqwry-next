@@ -24,6 +24,20 @@ function getCmdFactory(isspeed: boolean, p: string): CmdFactory {
   return isspeed ? bufferCmd(p) : fileCmd(p);
 }
 
+export function attachSpeedUnSpeed<T>(
+  fn: T,
+  driver: { speed(): unknown; unSpeed(): unknown },
+): void {
+  (fn as Record<string, unknown>).speed = (() => {
+    driver.speed();
+    return fn;
+  }) as unknown as () => T;
+  (fn as Record<string, unknown>).unSpeed = (() => {
+    driver.unSpeed();
+    return fn;
+  }) as unknown as () => T;
+}
+
 /**
  * IP地址转数值
  */
@@ -94,7 +108,7 @@ function getMiddleOffset(
   recordLength: number,
 ): number {
   const records = (((end - begin) / recordLength) >> 1) * recordLength + begin;
-  return records ^ begin ? records : records + recordLength;
+  return records === begin ? records + recordLength : records;
 }
 
 class QqwryDriverImpl {
@@ -206,74 +220,51 @@ class QqwryDriverImpl {
     const eg = this.locateIP(ip2, cmd);
 
     const self = this;
-    let i = bg;
+    const header = ["begInt", "endInt", "begIP", "endIP", "Country", "Area"];
 
-    const outStream = new Readable({
-      objectMode: objectMode,
-      destroy(
-        this: Readable,
-        err: Error | null,
-        callback: (error: Error | null) => void,
-      ) {
+    function* generate() {
+      for (let i = bg; i <= eg; i += IP_RECORD_LENGTH) {
+        const addr = self.setIPLocation(i, cmd);
+        const begInt = cmd.readUIntLE(i, 4);
+        const endInt = cmd.readUIntLE(cmd.readUIntLE(i + 4, 3), 4);
+        const begIP = intToIP(begInt);
+        const endIP = intToIP(endInt);
+        const Country = addr.Country;
+        const Area = addr.Area;
+
+        switch (format) {
+          case "csv":
+            if (i === bg && outHeader) {
+              const hdr = formatFn(header);
+              if (hdr) yield hdr;
+            }
+            yield formatFn([begInt, endInt, begIP, endIP, Country, Area]);
+            break;
+          case "json":
+            if (i === bg) yield "[";
+            yield formatFn(
+              outHeader
+                ? { begInt, endInt, begIP, endIP, Country, Area }
+                : [begInt, endInt, begIP, endIP, Country, Area],
+            );
+            yield i === eg ? "]\n" : ",";
+            break;
+          case "object":
+          case "text":
+          default:
+            yield formatFn([begInt, endInt, begIP, endIP, Country, Area]);
+            break;
+        }
+      }
+    }
+
+    return Readable.from(generate(), {
+      objectMode,
+      destroy(err, callback) {
         cmd.close();
         callback(err);
       },
     });
-
-    outStream._read = function (this: Readable, _size: number) {
-      if (i > eg) {
-        cmd.close();
-        this.push(null);
-        return;
-      }
-
-      const addr = self.setIPLocation(i, cmd);
-      const begInt = cmd.readUIntLE(i, 4);
-      const endInt = cmd.readUIntLE(cmd.readUIntLE(i + 4, 3), 4);
-      const begIP = intToIP(begInt);
-      const endIP = intToIP(endInt);
-      const Country = addr.Country;
-      const Area = addr.Area;
-
-      let outstr: string;
-      switch (format) {
-        case "csv":
-          if (i === bg && outHeader) {
-            outstr = formatFn([
-              "begInt",
-              "endInt",
-              "begIP",
-              "endIP",
-              "Country",
-              "Area",
-            ]);
-            if (outstr) this.push(outstr);
-          }
-          outstr = formatFn([begInt, endInt, begIP, endIP, Country, Area]);
-          this.push(outstr);
-          break;
-        case "json":
-          outstr = "";
-          if (i === bg) outstr += "[";
-          outstr += formatFn(
-            outHeader
-              ? { begInt, endInt, begIP, endIP, Country, Area }
-              : [begInt, endInt, begIP, endIP, Country, Area],
-          );
-          outstr += i === eg ? "]\n" : ",";
-          this.push(outstr);
-          break;
-        case "object":
-        case "text":
-        default:
-          this.push(formatFn([begInt, endInt, begIP, endIP, Country, Area]));
-          break;
-      }
-
-      i += IP_RECORD_LENGTH;
-    };
-
-    return outStream;
   }
 
   private locateIP(ip: number, cmd: CmdApi): number {
@@ -379,14 +370,7 @@ function wrapQqwry(driver: QqwryDriverImpl): QqwryCallable {
     driver,
   ) as QqwryCallable["searchIPScope"];
   fn.searchIPScopeStream = driver.searchIPScopeStream.bind(driver);
-  fn.speed = (() => {
-    driver.speed();
-    return fn;
-  }) as unknown as () => QqwryCallable;
-  fn.unSpeed = (() => {
-    driver.unSpeed();
-    return fn;
-  }) as unknown as () => QqwryCallable;
+  attachSpeedUnSpeed(fn, driver);
 
   return fn;
 }

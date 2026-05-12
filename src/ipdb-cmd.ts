@@ -18,8 +18,6 @@ export default function ipdbCmd(dataPath: string): IpdbCmdFactory {
   const reader = new Reader(dataPath);
 
   const api: IpdbCmdApi = {
-    name: "ipdbCmd",
-
     find(addr: string, language: string): string[] {
       return reader.find(addr, language);
     },

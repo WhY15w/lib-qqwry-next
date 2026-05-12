@@ -6,8 +6,6 @@ export function bufferCmd(path: string): CmdFactory {
   const max = buffer.length;
 
   const api: CmdApi = {
-    name: "bufferCmd",
-
     readBuffer(start: number, length: number): Buffer {
       start = start || 0;
       length = length || 1;
@@ -52,8 +50,6 @@ export function fileCmd(path: string): CmdFactory {
     open();
 
     return {
-      name: "fileCmd",
-
       readBuffer(start: number, length: number): Buffer {
         start = start || 0;
         length = length || 1;

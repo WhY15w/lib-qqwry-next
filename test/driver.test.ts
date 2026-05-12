@@ -82,6 +82,7 @@ describe("lib-qqwry", () => {
 
     it("callable with no args returns special IP info", () => {
       const q = libqqwry(DAT_PATH);
+      // @ts-expect-error
       const result = q();
       expect(result).toBeDefined();
       expect(result.Country).toBeDefined();

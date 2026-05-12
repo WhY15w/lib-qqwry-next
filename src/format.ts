@@ -1,4 +1,4 @@
-export type FormatType = "text" | "csv" | "json" | "object";
+type FormatType = "text" | "csv" | "json" | "object";
 
 function csvDecode(str: string): string {
   return str.replace(/^(.*[,"\n].*)$/, (_k: string) => {

@@ -1,5 +1,5 @@
 import ipdbCmd from "./ipdb-cmd";
-import { intToIP } from "./driver";
+import { intToIP, attachSpeedUnSpeed } from "./driver";
 import type { IpdbCmdFactory, IpdbCallable } from "./types";
 
 class IpdbDriverImpl {
@@ -66,14 +66,7 @@ function wrapIpdb(driver: IpdbDriverImpl): IpdbCallable {
   fn.fields = driver.fields.bind(driver);
   fn.languages = driver.languages.bind(driver);
   fn.buildTime = driver.buildTime.bind(driver);
-  fn.speed = (() => {
-    driver.speed();
-    return fn;
-  }) as unknown as () => IpdbCallable;
-  fn.unSpeed = (() => {
-    driver.unSpeed();
-    return fn;
-  }) as unknown as () => IpdbCallable;
+  attachSpeedUnSpeed(fn, driver);
 
   return fn;
 }
@@ -90,5 +83,3 @@ export function createIpdb(
   const driver = new IpdbDriverImpl(dataPath, options);
   return wrapIpdb(driver);
 }
-
-export { IpdbDriverImpl };
