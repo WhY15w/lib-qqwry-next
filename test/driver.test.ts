@@ -319,5 +319,53 @@ describe("lib-qqwry", () => {
       const result = ipdb("8.8.8.8", "CN");
       expect(result.ip).toBe("8.8.8.8");
     });
+
+    it("looks up IPv6 loopback ::1", () => {
+      const ipdb = libqqwry.ipdb(IPDB_PATH);
+      const result = ipdb("::1");
+      expect(result.ip).toBe("::1");
+      expect(result.country_name).toBeTruthy();
+    });
+
+    it("looks up Chinese IPv6 address", () => {
+      const ipdb = libqqwry.ipdb(IPDB_PATH);
+      const result = ipdb("2400:3200::1");
+      expect(result.ip).toBe("2400:3200::1");
+      expect(result.country_name).toBe("中国");
+      expect(result.region_name).toBe("浙江");
+      expect(result.country_code).toBe("CN");
+    });
+
+    it("looks up US IPv6 address", () => {
+      const ipdb = libqqwry.ipdb(IPDB_PATH);
+      const result = ipdb("2a04:4e42::1");
+      expect(result.ip).toBe("2a04:4e42::1");
+      expect(result.country_name).toBe("美国");
+      expect(result.country_code).toBe("US");
+    });
+
+    it("looks up IPv6 with language param", () => {
+      const ipdb = libqqwry.ipdb(IPDB_PATH);
+      const result = ipdb("2400:da00::1", "CN");
+      expect(result.ip).toBe("2400:da00::1");
+      expect(result.country_name).toBe("中国");
+      expect(result.city_name).toBe("北京");
+    });
+
+    it("returns fields for IPv6 result", () => {
+      const ipdb = libqqwry.ipdb(IPDB_PATH);
+      const result = ipdb("2600::1");
+      const fields = ipdb.fields();
+      for (const f of fields) {
+        expect(result).toHaveProperty(f);
+      }
+    });
+
+    it("looks up IPv4-mapped format ::ffff:x.x.x.x", () => {
+      const ipdb = libqqwry.ipdb(IPDB_PATH);
+      const result = ipdb("::ffff:8.8.8.8");
+      expect(result.ip).toBe("::ffff:8.8.8.8");
+      expect(result.country_name).toBeTruthy();
+    });
   });
 });

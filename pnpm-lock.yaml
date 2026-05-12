@@ -11,9 +11,6 @@ importers:
       gbk.js:
         specifier: ^0.2.4
         version: 0.2.4
-      ipip-ipdb:
-        specifier: ^0.6.0
-        version: 0.6.0
     devDependencies:
       '@types/node':
         specifier: ^22.19.19
@@ -473,13 +470,6 @@ packages:
 
   gbk.js@0.2.4:
     resolution: {integrity: sha512-WsTPt31seMy5q3VuF1BP1sUopJPBiOAv6u30hE+yoyAgi0QgX7KpH9SxidyYTGTwisF+qhK3TR3+ckEwLbimPw==}
-
-  ipaddr.js@1.9.1:
-    resolution: {integrity: sha512-0KI/607xoxSToH7GjN1FfSbLoU0+btTicjsQSWQlh/hZykN8KpmMf7uYwPW3R+akZ6R/w18ZlXSHBYXiYUPO3g==}
-    engines: {node: '>= 0.10'}
-
-  ipip-ipdb@0.6.0:
-    resolution: {integrity: sha512-sAqtZgjIDjgk9u9V8+4+c5DbbIxkLw5OWzOvwGDn+ZTqjjwgojkeQqRKfGZw1JTEwq2S63+8f8XSv8NsuTke3Q==}
 
   joycon@3.1.1:
     resolution: {integrity: sha512-34wB/Y7MW7bzjKRjUKTa46I2Z7eV62Rkhva+KkopW7Qvv/OSWBqvkSY7vusOPrNuZcUG3tApvdVgNB8POj3SPw==}
@@ -1064,12 +1054,6 @@ snapshots:
     optional: true
 
   gbk.js@0.2.4: {}
-
-  ipaddr.js@1.9.1: {}
-
-  ipip-ipdb@0.6.0:
-    dependencies:
-      ipaddr.js: 1.9.1
 
   joycon@3.1.1: {}
 
