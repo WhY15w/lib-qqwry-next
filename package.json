@@ -13,14 +13,15 @@
         "default": "./dist/index.js"
       },
       "require": {
-        "types": "./dist/index.d.ts",
+        "types": "./index.d.cts",
         "default": "./dist/index.cjs"
       }
     }
   },
   "files": [
     "dist",
-    "bin"
+    "bin",
+    "index.d.cts"
   ],
   "scripts": {
     "build": "tsup",
