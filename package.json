@@ -1,6 +1,6 @@
 {
   "name": "lib-qqwry-next",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Using NodeJS analytical IP Library (qqwry.dat/qqwry.ipdb) module.",
   "type": "module",
   "main": "./dist/index.cjs",
