@@ -15,7 +15,7 @@
 ## 安装
 
 ```
-npm i @yuyuqaq/lib-qqwry
+npm i lib-qqwry-next
 ```
 
 ## 数据文件
@@ -30,7 +30,7 @@ npm i @yuyuqaq/lib-qqwry
 ### Node (CJS)
 
 ```js
-const libqqwry = require("@yuyuqaq/lib-qqwry");
+const libqqwry = require("lib-qqwry-next");
 const qqwry = libqqwry("./data/qqwry.dat"); // dataPath 必填
 qqwry.speed(); // 启用急速模式
 
@@ -51,7 +51,7 @@ qqwry
 ### Node (ESM)
 
 ```js
-import libqqwry from "@yuyuqaq/lib-qqwry";
+import libqqwry from "lib-qqwry-next";
 const qqwry = libqqwry("./data/qqwry.dat", true); // dataPath, speed
 const result = qqwry.searchIP("202.103.102.10");
 ```
@@ -59,7 +59,7 @@ const result = qqwry.searchIP("202.103.102.10");
 ### ipdb 格式
 
 ```js
-import libqqwry from "@yuyuqaq/lib-qqwry";
+import libqqwry from "lib-qqwry-next";
 
 const ipdb = libqqwry.ipdb("./data/qqwry.ipdb"); // dataPath 必填
 const result = ipdb.searchIP("8.8.8.8");
